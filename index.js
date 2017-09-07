@@ -34,7 +34,9 @@ $(function () {
             var hash = window.location.hash.replace("#","");
             $.get(`${snippets}${hash}`,function(d,x,r) {
                 Editor.setValue(d,-1);
-                Go.Compile(d)
+                Go.Compile(d).then(() => {
+                    $(".btn").prop('disabled', false);
+                })
             })
         } else {
             Editor.setValue(defaultProg,-1);
