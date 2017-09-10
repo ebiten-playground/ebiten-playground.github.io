@@ -15,11 +15,18 @@ func main() {
         doc.Get("body").Set("innerHTML","HAI")
     })
 }
-`
-;
-$(function () {
+`;
+
+function setButtonsDisabled(value) {
+    let buttons = document.querySelectorAll(".btn");
+    for (let button of buttons) {
+        button.disabled = value;
+    }
+}
+
+function init() {
     Go.RedirectConsole(function (l) {
-        var e = document.querySelector("#console");
+        var e = document.getElementById("console");
         e.innerHTML = e.innerHTML + l;
     })
     var el = document.querySelector("div.pg-editor")
@@ -28,76 +35,92 @@ $(function () {
     editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/golang");
     window.Editor = editor;
-    $(function () {
-        $(".btn").prop('disabled', true);
-        if (window.location.hash) {
-            var hash = window.location.hash.replace("#","");
-            $.get(`${snippets}${hash}`,function(d,x,r) {
-                Editor.setValue(d,-1);
-                Go.Compile(d).then(() => {
-                    $(".btn").prop('disabled', false);
-                })
+
+    setButtonsDisabled(true);
+    if (window.location.hash) {
+        var hash = window.location.hash.replace("#","");
+        fetch(`${snippets}${hash}`).then(response => {
+            return response.text();
+        }).then(text => {
+            Editor.setValue(text, -1);
+            Go.Compile(text).then(() => {
+                setButtonsDisabled(false);
             })
-        } else {
-            Editor.setValue(defaultProg,-1);
-            Go.Compile(defaultProg).then(() => {$(".btn").prop('disabled', false);});
-        }
-        var fontsize = getCookie("fontsize");
-        if (fontsize != "") {
-            $(`.pg-fontsize option:contains("${fontsize}")`).prop('selected', true);
-            editor.setFontSize(+fontsize);
-        } else {
-            $(`.pg-fontsize option:contains("16")`).prop('selected', true);
-            editor.setFontSize(16);
-        }
-        $(".pg-fontsize").on("change",function(e) {
-            e.preventDefault()
-            var size = +($(".pg-fontsize :selected").text());
-            editor.setFontSize(size);
-            setCookie("fontsize",size,365);
         });
-        $(".pg-format").on("click", function (e) {
-            e.preventDefault();
-            $(".btn").prop('disabled', true);
-            var src = Editor.getValue();
-            Go.Format(src, $(".pg-imports").prop("checked"))
-                .then((s) => Editor.setValue(s,-1))
-                .then(() => $(".btn").prop('disabled', false))
-                .catch((err) => {
-                    $("#console").text(err);
-                    $(".btn").prop('disabled', false);
-                })
+    } else {
+        Editor.setValue(defaultProg,-1);
+        Go.Compile(defaultProg).then(() => {
+            setButtonsDisabled(false);
         });
-        $(".pg-share").on("click",function(e) {
-            e.preventDefault()
-            var $share = $(".pg-share");
-            $share.prop('disabled',true);
-            $.post(`${snippets}`,editor.getValue(),function(d,s,x) {
-                if (x.status != 200) {
-                    $("#console").text(s);
-                } else { 
-                location.hash = `#/${d}`;
+    }
+
+    var fontsize = getCookie("fontsize");
+    if (fontsize != "") {
+        document.querySelector('.pg-fontsize').value = fontsize;
+        editor.setFontSize(+fontsize);
+    } else {
+        document.querySelector('.pg-fontsize').value = '16';
+        editor.setFontSize(16);
+    }
+
+    document.querySelector(".pg-fontsize").addEventListener("change", (e) => {
+        e.preventDefault()
+        var size = +(document.querySelector(".pg-fontsize").value);
+        editor.setFontSize(size);
+        setCookie("fontsize",size,365);
+    });
+
+    document.querySelector(".pg-format").addEventListener("click", (e) => {
+        e.preventDefault();
+        setButtonsDisabled(true);
+        var src = Editor.getValue();
+        Go.Format(src, document.querySelector(".pg-imports").checked)
+            .then(s => Editor.setValue(s,-1))
+            .then(() => {setButtonsDisabled(false);})
+            .catch(err => {
+                document.getElementById("console").textContent = err;
+                setButtonsDisabled(false);
+            })
+    });
+
+    document.querySelector(".pg-share").addEventListener("click", (e) => {
+        e.preventDefault()
+        var $share = document.querySelector(".pg-share");
+        $share.disabled = true;
+        fetch(`${snippets}`, {
+            method: 'POST',
+            body:   editor.getValue(),
+        }).then(response => {
+            return response.text();
+        }).then(text => {
+            location.hash = `#/${text}`;
+            $share.disabled = false;
+        }).catch(err => {
+            document.getElementById("console").textContent = err;
+        });
+    });
+
+    document.querySelector(".pg-run").addEventListener("click", (e) => {
+        e.preventDefault();
+        setButtonsDisabled(true);
+        Go.Compile(editor.getValue())
+            .then((src) => {
+                document.getElementById("console").textContent = '';
+                var $output = document.getElementById("output")
+                while ($output.firstChild) {
+                    $output.removeChild($output.firstChild);
                 }
-                $share.prop('disabled',false);
-            });
-        });
-        $(".pg-run").on("click", function (e) {
-            e.preventDefault();
-            $(".btn").prop('disabled', true);
-            Go.Compile(editor.getValue())
-                .then((src) => {
-                    $("#console").text("");
-                    var $output = $("#output")
-                    $output.empty();
-                    $div = $(`<div class="embed-responsive embed-responsive-4by3"></div>`)
-                    // allowfullscreen
-                    var iframe = document.createElement('iframe');
-                    iframe.className = "embed-responsive-item";
-                    $div.append(iframe);
-                    $output.append($div)
-                    var doc = iframe.contentWindow.document;
-                    doc.open()
-                    doc.write(`
+                let $div = document.createElement('div');
+                $div.classList.add('embed-responsive');
+                $div.classList.add('embed-responsive-4by3');
+                // allowfullscreen
+                var iframe = document.createElement('iframe');
+                iframe.className = "embed-responsive-item";
+                $div.appendChild(iframe);
+                $output.appendChild($div)
+                var doc = iframe.contentWindow.document;
+                doc.open()
+                doc.write(`
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -114,16 +137,17 @@ $(function () {
                 </body>
                 </html>
                 `)
-                    doc.close()
-                    $(".btn").prop('disabled', false);
-                })
-                .catch((err) => {
-                    $("#console").text(err);
-                    $(".btn").prop('disabled', false);
-                });
-        });
+                doc.close()
+                setButtonsDisabled(false);
+            })
+            .catch((err) => {
+                document.getElementById("console").textContent = err;
+                setButtonsDisabled(false);
+            });
     });
-});
+}
+
+window.addEventListener('load', init);
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
