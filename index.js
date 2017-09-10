@@ -48,10 +48,6 @@ function init() {
     editor.$blockScrolling = Infinity;
     editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/golang");
-
-    // Reset the font size other than 12 once so that
-    // setFontSize takes an effect with any numbers.
-    editor.setFontSize(10);
     window.Editor = editor;
 
     let fontSize = parseInt(getCookie("fontsize"), 10);
