@@ -50,6 +50,13 @@ function init() {
     editor.getSession().setMode("ace/mode/golang");
     window.Editor = editor;
 
+    let fontSize = parseInt(getCookie("fontsize"), 10);
+    if (fontSize === 0) {
+        fontSize = 16;
+    }
+    document.querySelector('.pg-fontsize').value = fontSize;
+    editor.setFontSize(fontSize);
+
     setButtonsDisabled(true);
     if (window.location.hash) {
         var hash = window.location.hash.replace("#","");
@@ -62,19 +69,10 @@ function init() {
             })
         });
     } else {
-        Editor.setValue(defaultProg,-1);
+        Editor.setValue(defaultProg, -1);
         Go.Compile(defaultProg).then(() => {
             setButtonsDisabled(false);
         });
-    }
-
-    var fontsize = getCookie("fontsize");
-    if (fontsize != "") {
-        document.querySelector('.pg-fontsize').value = fontsize;
-        editor.setFontSize(+fontsize);
-    } else {
-        document.querySelector('.pg-fontsize').value = '16';
-        editor.setFontSize(16);
     }
 
     document.querySelector(".pg-fontsize").addEventListener("change", (e) => {
