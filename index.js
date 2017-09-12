@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var script = "script";
-var snippets = "https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/";
-var defaultProg = `package main
+let script = 'script';
+let snippets = 'https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/';
+let defaultProg = `package main
 
 import (
     "fmt"
@@ -32,7 +32,7 @@ func main() {
 `;
 
 function setButtonsDisabled(value) {
-    let buttons = document.querySelectorAll(".btn");
+    let buttons = document.querySelectorAll('.btn');
     for (let button of buttons) {
         button.disabled = value;
     }
@@ -40,18 +40,18 @@ function setButtonsDisabled(value) {
 
 function init() {
     Go.RedirectConsole(function (l) {
-        var e = document.getElementById("console");
+        let e = document.getElementById('console');
         e.innerHTML = e.innerHTML + l;
     })
-    var el = document.querySelector("div.pg-editor")
-    var editor = ace.edit(el);
+    let el = document.querySelector('div.pg-editor')
+    let editor = ace.edit(el);
     editor.$blockScrolling = Infinity;
-    editor.setTheme("ace/theme/sqlserver");
-    editor.getSession().setMode("ace/mode/golang");
+    editor.setTheme('ace/theme/sqlserver');
+    editor.getSession().setMode('ace/mode/golang');
 
     setButtonsDisabled(true);
     if (window.location.hash) {
-        var hash = window.location.hash.replace("#","");
+        let hash = window.location.hash.substring(1);
         fetch(`${snippets}${hash}`).then(response => {
             return response.text();
         }).then(text => {
@@ -67,37 +67,37 @@ function init() {
         });
     }
 
-    let fontSize = parseInt(getCookie("fontsize"), 10);
+    let fontSize = parseInt(getCookie('fontsize'), 10);
     if (fontSize === 0) {
         fontSize = 16;
     }
     document.querySelector('.pg-fontsize').value = fontSize;
     editor.setFontSize(fontSize);
 
-    document.querySelector(".pg-fontsize").addEventListener("change", (e) => {
+    document.querySelector('.pg-fontsize').addEventListener('change', (e) => {
         e.preventDefault()
-        var size = +(document.querySelector(".pg-fontsize").value);
+        let size = +(document.querySelector('.pg-fontsize').value);
         editor.setFontSize(size);
-        setCookie("fontsize",size,365);
+        setCookie('fontsize',size,365);
     });
 
-    document.querySelector(".pg-format").addEventListener("click", (e) => {
+    document.querySelector('.pg-format').addEventListener('click', (e) => {
         e.preventDefault();
         setButtonsDisabled(true);
-        var src = editor.getValue();
-        Go.Format(src, document.querySelector(".pg-imports").checked)
+        let src = editor.getValue();
+        Go.Format(src, document.querySelector('.pg-imports').checked)
             .then(s => editor.setValue(s,-1))
             .then(() => {setButtonsDisabled(false);})
             .catch(err => {
-                document.getElementById("console").textContent = err;
+                document.getElementById('console').textContent = err;
                 setButtonsDisabled(false);
             })
     });
 
-    document.querySelector(".pg-share").addEventListener("click", (e) => {
+    document.querySelector('.pg-share').addEventListener('click', (e) => {
         e.preventDefault()
-        var $share = document.querySelector(".pg-share");
-        $share.disabled = true;
+        let share = document.querySelector('.pg-share');
+        share.disabled = true;
         fetch(`${snippets}`, {
             method: 'POST',
             body:   editor.getValue(),
@@ -105,31 +105,31 @@ function init() {
             return response.text();
         }).then(text => {
             location.hash = `#/${text}`;
-            $share.disabled = false;
+            share.disabled = false;
         }).catch(err => {
-            document.getElementById("console").textContent = err;
+            document.getElementById('console').textContent = err;
         });
     });
 
-    document.querySelector(".pg-run").addEventListener("click", (e) => {
+    document.querySelector('.pg-run').addEventListener('click', (e) => {
         e.preventDefault();
         setButtonsDisabled(true);
         Go.Compile(editor.getValue())
             .then((src) => {
-                document.getElementById("console").textContent = '';
-                var $output = document.getElementById("output")
-                while ($output.firstChild) {
-                    $output.removeChild($output.firstChild);
+                document.getElementById('console').textContent = '';
+                let output = document.getElementById('output')
+                while (output.firstChild) {
+                    output.removeChild(output.firstChild);
                 }
-                let $div = document.createElement('div');
-                $div.classList.add('embed-responsive');
-                $div.classList.add('embed-responsive-4by3');
+                let div = document.createElement('div');
+                div.classList.add('embed-responsive');
+                div.classList.add('embed-responsive-4by3');
                 // allowfullscreen
-                var iframe = document.createElement('iframe');
-                iframe.className = "embed-responsive-item";
-                $div.appendChild(iframe);
-                $output.appendChild($div)
-                var doc = iframe.contentWindow.document;
+                let iframe = document.createElement('iframe');
+                iframe.className = 'embed-responsive-item';
+                div.appendChild(iframe);
+                output.appendChild(div)
+                let doc = iframe.contentWindow.document;
                 doc.open()
                 doc.write(`
                 <!DOCTYPE html>
@@ -152,7 +152,7 @@ function init() {
                 setButtonsDisabled(false);
             })
             .catch((err) => {
-                document.getElementById("console").textContent = err;
+                document.getElementById('console').textContent = err;
                 setButtonsDisabled(false);
             });
     });
@@ -161,18 +161,18 @@ function init() {
 window.addEventListener('load', init);
 
 function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
+    let d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    let expires = 'expires='+ d.toUTCString();
+    document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 }
 
 function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
+    let name = cname + '=';
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
         }
@@ -180,5 +180,5 @@ function getCookie(cname) {
             return c.substring(name.length, c.length);
         }
     }
-    return "";
+    return '';
 }
