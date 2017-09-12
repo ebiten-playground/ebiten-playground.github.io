@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-let script = 'script';
 let snippets = 'https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/';
 let defaultProg = `package main
 
@@ -130,21 +129,22 @@ function init() {
                 div.appendChild(iframe);
                 output.appendChild(div)
                 let doc = iframe.contentWindow.document;
-                doc.open()
+                doc.open();
+                // TODO: src should be escaped.
                 doc.write(`
                 <!DOCTYPE html>
                 <html>
                 <head>
-                <${script}>
+                <script>
                 if (top.goPrintToConsole) {
                     window.goPrintToConsole = top.goPrintToConsole;
                 }
-                </${script}>
+                </script>
                 </head>
                 <body>
-                <${script}>
+                <script>
                 ${src}
-                </${script}>
+                </script>
                 </body>
                 </html>
                 `)
