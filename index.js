@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-let snippets = 'https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/';
-let defaultProg = `package main
+const snippets = 'https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/';
+const defaultProg = `package main
 
 import (
     "fmt"
@@ -28,6 +28,19 @@ func main() {
         doc.Get("body").Set("innerHTML","HAI")
     })
 }
+`;
+const iframeDocument = `<!DOCTYPE html>
+<html>
+<head>
+<script>
+if (top.goPrintToConsole) {
+    window.goPrintToConsole = top.goPrintToConsole;
+}
+</script>
+</head>
+<body>
+</body>
+</html>
 `;
 
 function setButtonsDisabled(value) {
@@ -130,20 +143,7 @@ function init() {
                 output.appendChild(div)
                 let doc = iframe.contentWindow.document;
                 doc.open();
-                doc.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                <script>
-                if (top.goPrintToConsole) {
-                    window.goPrintToConsole = top.goPrintToConsole;
-                }
-                </script>
-                </head>
-                <body>
-                </body>
-                </html>
-                `)
+                doc.write(iframeDocument)
                 let script = doc.createElement('script');
                 script.textContent = src;
                 doc.body.appendChild(script);
