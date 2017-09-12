@@ -43,7 +43,7 @@ function init() {
         let e = document.getElementById('console');
         e.innerHTML = e.innerHTML + l;
     })
-    let el = document.querySelector('div.pg-editor')
+    let el = document.getElementById('pg-editor')
     let editor = ace.edit(el);
     editor.$blockScrolling = Infinity;
     editor.setTheme('ace/theme/sqlserver');
@@ -71,21 +71,21 @@ function init() {
     if (fontSize === 0) {
         fontSize = 16;
     }
-    document.querySelector('.pg-fontsize').value = fontSize;
+    document.getElementById('pg-fontsize').value = fontSize;
     editor.setFontSize(fontSize);
 
-    document.querySelector('.pg-fontsize').addEventListener('change', (e) => {
+    document.getElementById('pg-fontsize').addEventListener('change', (e) => {
         e.preventDefault()
-        let size = +(document.querySelector('.pg-fontsize').value);
+        let size = +(document.getElementById('pg-fontsize').value);
         editor.setFontSize(size);
         setCookie('fontsize',size,365);
     });
 
-    document.querySelector('.pg-format').addEventListener('click', (e) => {
+    document.getElementById('pg-format').addEventListener('click', (e) => {
         e.preventDefault();
         setButtonsDisabled(true);
         let src = editor.getValue();
-        Go.Format(src, document.querySelector('.pg-imports').checked)
+        Go.Format(src, document.getElementById('pg-imports').checked)
             .then(s => editor.setValue(s,-1))
             .then(() => {setButtonsDisabled(false);})
             .catch(err => {
@@ -94,9 +94,9 @@ function init() {
             })
     });
 
-    document.querySelector('.pg-share').addEventListener('click', (e) => {
+    document.getElementById('pg-share').addEventListener('click', (e) => {
         e.preventDefault()
-        let share = document.querySelector('.pg-share');
+        let share = document.getElementById('pg-share');
         share.disabled = true;
         fetch(`${snippets}`, {
             method: 'POST',
@@ -111,7 +111,7 @@ function init() {
         });
     });
 
-    document.querySelector('.pg-run').addEventListener('click', (e) => {
+    document.getElementById('pg-run').addEventListener('click', (e) => {
         e.preventDefault();
         setButtonsDisabled(true);
         Go.Compile(editor.getValue())

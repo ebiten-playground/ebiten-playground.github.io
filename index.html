@@ -19,7 +19,7 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
     <style type="text/css" media="screen">
-        div.pg-editor {
+        #pg-editor {
             height: 50vh;
         }
     </style>
@@ -45,13 +45,13 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <form class="navbar-form navbar-left">
-                    <button class="btn btn-default pg-run">Run</button>
-                    <button class="btn btn-default pg-format">Format</button>
-                    <label title="Rewrite imports on Format"><input class="pg-imports" type="checkbox" checked="checked" />Imports</label>
+                    <button id="pg-run" class="btn btn-default">Run</button>
+                    <button id="pg-format" class="btn btn-default">Format</button>
+                    <label title="Rewrite imports on Format"><input id="pg-imports" type="checkbox" checked="checked" />Imports</label>
                 </form>
                 <form class="navbar-form navbar-left">
                 <label>Font size</label>
-                <select class="pg-fontsize form-control">
+                <select id="pg-fontsize" class="form-control">
                     <option value="8">8</option>
                     <option value="10">10</option>
                     <option value="12">12</option>
@@ -62,7 +62,7 @@
                   </select>
                 </form>
                 <form class="navbar-form navbar-left">
-                        <button class="btn btn-default pg-share" disabled="disabled">Share</button>
+                        <button id="pg-share" class="btn btn-default" disabled="disabled">Share</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -93,7 +93,7 @@
                         <h3 class="panel-title">Code</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="pg-editor"></div>
+                        <div id="pg-editor"></div>
                     </div>
                 </div>
                 <div class="panel panel-default">
