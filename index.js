@@ -130,7 +130,6 @@ function init() {
                 output.appendChild(div)
                 let doc = iframe.contentWindow.document;
                 doc.open();
-                // TODO: src should be escaped.
                 doc.write(`
                 <!DOCTYPE html>
                 <html>
@@ -142,12 +141,12 @@ function init() {
                 </script>
                 </head>
                 <body>
-                <script>
-                ${src}
-                </script>
                 </body>
                 </html>
                 `)
+                let script = doc.createElement('script');
+                script.textContent = src;
+                doc.body.appendChild(script);
                 doc.close()
                 setButtonsDisabled(false);
             })
