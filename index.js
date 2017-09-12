@@ -48,7 +48,6 @@ function init() {
     editor.$blockScrolling = Infinity;
     editor.setTheme("ace/theme/sqlserver");
     editor.getSession().setMode("ace/mode/golang");
-    window.Editor = editor;
 
     setButtonsDisabled(true);
     if (window.location.hash) {
@@ -56,13 +55,13 @@ function init() {
         fetch(`${snippets}${hash}`).then(response => {
             return response.text();
         }).then(text => {
-            Editor.setValue(text, -1);
+            editor.setValue(text, -1);
             Go.Compile(text).then(() => {
                 setButtonsDisabled(false);
             })
         });
     } else {
-        Editor.setValue(defaultProg, -1);
+        editor.setValue(defaultProg, -1);
         Go.Compile(defaultProg).then(() => {
             setButtonsDisabled(false);
         });
@@ -85,9 +84,9 @@ function init() {
     document.querySelector(".pg-format").addEventListener("click", (e) => {
         e.preventDefault();
         setButtonsDisabled(true);
-        var src = Editor.getValue();
+        var src = editor.getValue();
         Go.Format(src, document.querySelector(".pg-imports").checked)
-            .then(s => Editor.setValue(s,-1))
+            .then(s => editor.setValue(s,-1))
             .then(() => {setButtonsDisabled(false);})
             .catch(err => {
                 document.getElementById("console").textContent = err;
