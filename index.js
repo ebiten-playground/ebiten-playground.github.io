@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const snippets = 'https://24l1khds95.execute-api.us-east-1.amazonaws.com/prod/';
+const snippets = 'https://natto-umeboshi-20170912.appspot.com/'
 const defaultProg = `package main
 
 import (
@@ -64,6 +64,9 @@ function init() {
     setButtonsDisabled(true);
     if (window.location.hash) {
         let hash = window.location.hash.substring(1);
+        if (hash[0] === '/') {
+            hash = hash.substring(1);
+        }
         fetch(`${snippets}${hash}`).then(response => {
             return response.text();
         }).then(text => {
