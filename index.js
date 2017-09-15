@@ -147,6 +147,7 @@ function init() {
                 // allowfullscreen
                 let iframe = document.createElement('iframe');
                 iframe.className = 'embed-responsive-item';
+                iframe.sandbox = 'allow-forms allow-scripts allow-same-origin allow-modals allow-popups';
                 div.appendChild(iframe);
                 output.appendChild(div)
                 let doc = iframe.contentWindow.document;
