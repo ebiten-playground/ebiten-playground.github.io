@@ -24,24 +24,8 @@ import (
 func main() {
     fmt.Println("Hai")
     doc := js.Global.Get("document")
-    doc.Call("addEventListener","DOMContentLoaded",func() {
-        fmt.Println("Loaded")
-        doc.Get("body").Set("innerHTML","HAI")
-    })
+    doc.Get("body").Set("innerHTML", "HAI")
 }
-`;
-const iframeDocument = `<!DOCTYPE html>
-<html>
-<head>
-<script>
-if (top.goPrintToConsole) {
-    window.goPrintToConsole = top.goPrintToConsole;
-}
-</script>
-</head>
-<body>
-</body>
-</html>
 `;
 
 function setButtonsDisabled(value) {
@@ -150,12 +134,12 @@ function init() {
                 div.appendChild(iframe);
                 output.appendChild(div)
                 let doc = iframe.contentWindow.document;
-                doc.open();
-                doc.write(iframeDocument)
                 let script = doc.createElement('script');
+                script.textContent = 'if (top.goPrintToConsole) { window.goPrintToConsole = top.goPrintToConsole; }';
+                doc.head.appendChild(script);
+                script = doc.createElement('script');
                 script.textContent = src;
                 doc.body.appendChild(script);
-                doc.close()
                 setButtonsDisabled(false);
             })
             .catch((err) => {
