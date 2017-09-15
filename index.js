@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// The source code of the storage is at https://github.com/hajimehoshi/snippets
 const snippets = 'https://natto-umeboshi-20170912.appspot.com/'
 const defaultProg = `package main
 
@@ -68,12 +69,16 @@ function init() {
             hash = hash.substring(1);
         }
         fetch(`${snippets}${hash}`).then(response => {
-            return response.text();
+            if (200 <= response.status && response.status < 300)
+                return response.text();
+            return Promise.reject(response);
         }).then(text => {
             editor.setValue(text, -1);
             Go.Compile(text).then(() => {
                 setButtonsDisabled(false);
             })
+        }).catch(_ => {
+            location.href = location.href.split('#')[0];
         });
     } else {
         editor.setValue(defaultProg, -1);
