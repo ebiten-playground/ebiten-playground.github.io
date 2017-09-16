@@ -52,7 +52,7 @@ function setButtonsDisabled(value) {
 }
 
 function init() {
-    Go.RedirectConsole(function (l) {
+    Go.RedirectConsole(l => {
         let e = document.getElementById('console');
         e.textContent += l;
     })
