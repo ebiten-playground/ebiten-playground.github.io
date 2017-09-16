@@ -54,7 +54,7 @@ function setButtonsDisabled(value) {
 function init() {
     Go.RedirectConsole(function (l) {
         let e = document.getElementById('console');
-        e.innerHTML = e.innerHTML + l;
+        e.textContent += l;
     })
     let el = document.getElementById('pg-editor')
     let editor = ace.edit(el);
