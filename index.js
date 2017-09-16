@@ -169,6 +169,19 @@ function init() {
                 setButtonsDisabled(false);
             });
     });
+
+    document.getElementById('nav-about').addEventListener('click', e => {
+        e.preventDefault();
+        let playground = document.getElementById('container-playground');
+        let about = document.getElementById('container-about');
+        if (playground.style.display === 'block' || playground.style.display === '') {
+            playground.style.display = 'none';
+            about.style.display = 'block';
+        } else {
+            playground.style.display = 'block';
+            about.style.display = 'none';
+        }
+    });
 }
 
 window.addEventListener('load', init);
