@@ -77,11 +77,7 @@ function init() {
             return Promise.reject(response);
         }).then(text => {
             editor.setValue(text, -1);
-            Go.Compile(text).then(() => {
-                setButtonsDisabled(false);
-            }).catch(_ => {
-                setButtonsDisabled(false);
-            })
+            setButtonsDisabled(false);
         }).catch(_ => {
             location.href = location.href.split('#')[0];
         });
