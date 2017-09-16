@@ -58,7 +58,10 @@ function init() {
     })
     let el = document.getElementById('pg-editor')
     let editor = ace.edit(el);
+
+    // Surpress warnings of Chrome.
     editor.$blockScrolling = Infinity;
+
     editor.setTheme('ace/theme/sqlserver');
     editor.getSession().setMode('ace/mode/golang');
 
