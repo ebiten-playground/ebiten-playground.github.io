@@ -132,16 +132,20 @@ function init() {
         // allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
-        iframe.sandbox = 'allow-forms allow-scripts allow-same-origin allow-modals allow-popups';
         div.appendChild(iframe);
         output.appendChild(div)
+
+        if (window.goPrintToConsole) {
+          iframe.contentWindow.goPrintToConsole = window.goPrintToConsole;
+        }
         let doc = iframe.contentWindow.document;
         let script = doc.createElement('script');
-        script.textContent = 'if (top.goPrintToConsole) { window.goPrintToConsole = top.goPrintToConsole; }';
-        doc.head.appendChild(script);
-        script = doc.createElement('script');
         script.textContent = src;
         doc.body.appendChild(script);
+
+        // Set the sandbox lastly. Accessing the parent window will be no longer permitted.
+        iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
+
         setButtonsDisabled(false);
       })
       .catch((err) => {
