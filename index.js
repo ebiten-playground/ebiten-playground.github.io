@@ -133,21 +133,29 @@ function init() {
         // allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
-        // TODO: Escape src: In HTML5, only a string '</script>' is forbidden.
         iframe.srcdoc = `<!DOCTYPE html>
 <head>
 <script>
 window.goPrintToConsole = text => {
   window.top.postMessage(text, '*');
 };
+window.addEventListener('message', e => {
+  let script = document.createElement('script');
+  script.textContent = e.data;
+  document.body.appendChild(script);
+});
 </script>
 </head>
 <body>
-<script>` + src + `</script>
-</body>`;
+</body>
+`;
         iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
         div.appendChild(iframe);
-        output.appendChild(div)
+        output.appendChild(div);
+
+        iframe.addEventListener('load', _ => {
+          iframe.contentWindow.postMessage(src, '*');
+        });
         setButtonsDisabled(false);
       })
       .catch((err) => {
