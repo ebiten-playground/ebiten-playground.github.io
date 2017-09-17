@@ -74,7 +74,7 @@ function init() {
   }
 
   let fontSize = parseInt(getCookie('fontsize'), 10);
-  if (fontSize === 0) {
+  if (fontSize === 0 || isNaN(fontSize)) {
     fontSize = 16;
   }
   document.getElementById('pg-fontsize').value = fontSize;
@@ -191,7 +191,7 @@ function getCookie(cname) {
   let name = cname + '=';
   let decodedCookie = decodeURIComponent(document.cookie);
   let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
+  for (let i = 0; i < ca.length; i++) {
     let c = ca[i];
     while (c.charAt(0) === ' ') {
       c = c.substring(1);
