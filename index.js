@@ -40,7 +40,6 @@ function init() {
     document.getElementById('console').textContent += l;
   });
   window.addEventListener('message', e => {
-    console.log(e.origin);
     window.goPrintToConsole(e.data);
   });
 
