@@ -67,9 +67,7 @@ function init() {
     });
   } else {
     editor.setValue(defaultProg, -1);
-    Go.Compile(defaultProg).then(() => {
-      setButtonsDisabled(false);
-    });
+    setButtonsDisabled(false);
   }
 
   let fontSize = parseInt(getCookie('fontsize'), 10);
