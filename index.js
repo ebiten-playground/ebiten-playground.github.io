@@ -17,14 +17,14 @@ const snippets = 'https://natto-umeboshi-20170912.appspot.com/'
 const defaultProg = `package main
 
 import (
-    "fmt"
-    "github.com/gopherjs/gopherjs/js"
+	"fmt"
+	"github.com/gopherjs/gopherjs/js"
 )
 
 func main() {
-    fmt.Println("Hai")
-    doc := js.Global.Get("document")
-    doc.Get("body").Set("innerHTML", "HAI")
+	fmt.Println("Hai")
+	doc := js.Global.Get("document")
+	doc.Get("body").Set("innerHTML", "HAI")
 }
 `;
 
@@ -43,14 +43,14 @@ function init() {
     window.goPrintToConsole(e.data);
   });
 
-  let el = document.getElementById('pg-editor')
-  let editor = ace.edit(el);
+  let editor = ace.edit(document.getElementById('pg-editor'));
 
   // Surpress warnings of Chrome.
   editor.$blockScrolling = Infinity;
 
   editor.setTheme('ace/theme/sqlserver');
   editor.getSession().setMode('ace/mode/golang');
+  editor.getSession().setOptions({ tabSize: 4, useSoftTabs: false });
 
   setButtonsDisabled(true);
   if (window.location.hash) {
@@ -93,7 +93,7 @@ function init() {
     let src = editor.getValue();
     Go.Format(src, document.getElementById('pg-imports').checked)
       .then(s => editor.setValue(s,-1))
-      .then(() => {setButtonsDisabled(false);})
+      .then(() => setButtonsDisabled(false))
       .catch(err => {
         document.getElementById('console').textContent = err;
         setButtonsDisabled(false);
