@@ -37,9 +37,13 @@ function setButtonsDisabled(value) {
 
 function init() {
   Go.RedirectConsole(l => {
-    let e = document.getElementById('console');
-    e.textContent += l;
-  })
+    document.getElementById('console').textContent += l;
+  });
+  window.addEventListener('message', e => {
+    console.log(e.origin);
+    window.goPrintToConsole(e.data);
+  });
+
   let el = document.getElementById('pg-editor')
   let editor = ace.edit(el);
 
@@ -130,21 +134,21 @@ function init() {
         // allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
-        // TODO: Remove allow-same-origin if possible.
-        // Now setting 'allow-same-origin' and 'allow-scripts' together is very dangerous.
-        // See https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox
-        iframe.sandbox = 'allow-same-origin allow-forms allow-scripts allow-modals allow-popups';
+        // TODO: Escape src: In HTML5, only a string '</script>' is forbidden.
+        iframe.srcdoc = `<!DOCTYPE html>
+<head>
+<script>
+window.goPrintToConsole = text => {
+  window.top.postMessage(text, '*');
+};
+</script>
+</head>
+<body>
+<script>` + src + `</script>
+</body>`;
+        iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
         div.appendChild(iframe);
         output.appendChild(div)
-
-        if (window.goPrintToConsole) {
-          iframe.contentWindow.goPrintToConsole = window.goPrintToConsole;
-        }
-        let doc = iframe.contentWindow.document;
-        let script = doc.createElement('script');
-        script.textContent = src;
-        doc.body.appendChild(script);
-
         setButtonsDisabled(false);
       })
       .catch((err) => {
