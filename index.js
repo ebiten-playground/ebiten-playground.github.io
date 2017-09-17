@@ -132,6 +132,7 @@ function init() {
         // allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
+        iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
         div.appendChild(iframe);
         output.appendChild(div)
 
@@ -142,9 +143,6 @@ function init() {
         let script = doc.createElement('script');
         script.textContent = src;
         doc.body.appendChild(script);
-
-        // Set the sandbox lastly. Accessing the parent window will be no longer permitted.
-        iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
 
         setButtonsDisabled(false);
       })
