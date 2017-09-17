@@ -132,6 +132,9 @@ function init() {
         // allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
+        // TODO: Remove allow-same-origin if possible.
+        // Now setting 'allow-same-origin' and 'allow-scripts' together is very dangerous.
+        // See https://html.spec.whatwg.org/multipage/iframe-embed-object.html#attr-iframe-sandbox
         iframe.sandbox = 'allow-same-origin allow-forms allow-scripts allow-modals allow-popups';
         div.appendChild(iframe);
         output.appendChild(div)
