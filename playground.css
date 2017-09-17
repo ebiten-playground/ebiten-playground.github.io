@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro');
 body {
-    font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 pre {
-    font-family: 'Source Code Pro', monospace;
+  font-family: 'Source Code Pro', monospace;
 }
 
 #pg-editor {
-    font-family: 'Source Code Pro', monospace;
-    height: 50vh;
+  font-family: 'Source Code Pro', monospace;
+  height: 50vh;
 }
 
 #container-about {
-    display: none;
+  display: none;
 }
