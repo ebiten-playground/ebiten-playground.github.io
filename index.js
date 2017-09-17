@@ -127,10 +127,7 @@ function init() {
         while (output.firstChild) {
           output.removeChild(output.firstChild);
         }
-        let div = document.createElement('div');
-        div.classList.add('embed-responsive');
-        div.classList.add('embed-responsive-4by3');
-        // allowfullscreen
+        // TODO: allowfullscreen
         let iframe = document.createElement('iframe');
         iframe.className = 'embed-responsive-item';
         iframe.srcdoc = `<!DOCTYPE html>
@@ -150,12 +147,11 @@ window.addEventListener('message', e => {
 </body>
 `;
         iframe.sandbox = 'allow-forms allow-scripts allow-modals allow-popups';
-        div.appendChild(iframe);
-        output.appendChild(div);
-
         iframe.addEventListener('load', _ => {
           iframe.contentWindow.postMessage(src, '*');
         });
+
+        output.appendChild(iframe);
         setButtonsDisabled(false);
       })
       .catch((err) => {
