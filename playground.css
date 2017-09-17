@@ -3,19 +3,7 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-.output {
-    font-family: 'Source Code Pro', monospace;
-}
-
 pre {
-    font-family: 'Source Code Pro', monospace;
-}
-
-.pre {
-    font-family: 'Source Code Pro', monospace;
-}
-
-#input textarea {
     font-family: 'Source Code Pro', monospace;
 }
 
