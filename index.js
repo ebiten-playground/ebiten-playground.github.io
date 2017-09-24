@@ -17,14 +17,57 @@ const snippets = 'https://natto-umeboshi-20170912.appspot.com/'
 const defaultProg = `package main
 
 import (
-	"fmt"
-	"github.com/gopherjs/gopherjs/js"
+	"log"
+
+	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 )
 
+const (
+	screenWidth  = 320
+	screenHeight = 240
+)
+
+var x = 0
+var vx = 1
+var ebitenImage *ebiten.Image
+
+func init() {
+	var err error
+	ebitenImage, _, err = ebitenutil.NewImageFromFile("https://hajimehoshi.github.io/ebiten/examples/_resources/images/ebiten.png", ebiten.FilterNearest)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func update(screen *ebiten.Image) error {
+	// Update
+	x += vx
+
+	switch {
+	case x > screenWidth-ebitenImage.Bounds().Dx():
+		vx = -1
+	case x < 0:
+		vx = 1
+	}
+
+	if ebiten.IsRunningSlowly() {
+		return nil
+	}
+
+	// Draw
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(float64(x), 100)
+	screen.DrawImage(ebitenImage, op)
+	ebitenutil.DebugPrint(screen, "Hello, Ebiten Playground!")
+
+	return nil
+}
+
 func main() {
-	fmt.Println("Hai")
-	doc := js.Global.Get("document")
-	doc.Get("body").Set("innerHTML", "HAI")
+	if err := ebiten.Run(update, screenWidth, screenHeight, 2, "Test"); err != nil {
+		log.Fatal(err)
+	}
 }
 `;
 
