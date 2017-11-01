@@ -14,7 +14,10 @@
 
 // The source code of the storage is at https://github.com/hajimehoshi/snippets
 const snippets = 'https://natto-umeboshi-20170912.appspot.com/'
-const defaultProg = `package main
+const defaultProg = `// Ebiten:               https://hajimehoshi.github.io/ebiten/
+// Ebiten API Reference: https://godoc.org/github.com/hajimehoshi/ebiten
+
+package main
 
 import (
 	"log"
