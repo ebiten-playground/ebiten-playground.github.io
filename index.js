@@ -157,6 +157,9 @@ function init() {
       return response.text();
     }).then(text => {
       location.hash = `#/${text}`;
+      let sharelink = document.getElementById('pg-sharelink');
+      sharelink.value = location.href;
+      sharelink.select();
       share.disabled = false;
     }).catch(err => {
       document.getElementById('console').textContent = err;

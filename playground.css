@@ -12,6 +12,10 @@ pre {
   height: 50vh;
 }
 
+#pg-sharelink {
+  width: 300px;
+}
+
 #container-about {
   display: none;
 }
